@@ -6,12 +6,23 @@ on:
       - master
 
 jobs:
-  test:
+  katalon-test:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Run CI test
-        run: echo "GitHub Actions berhasil berjalan!"
+      - name: Run Katalon Test
+        uses: katalon-studio/katalon-studio-github-action@v4.0
+        with:
+          version: '11.5.0'
+          projectPath: '${{ github.workspace }}'
+          args: >
+            -noSplash
+            -retry=0
+            -testSuitePath="Test Suites/TS_Login_CI"
+            -browserType="Chrome (headless)"
+            -apiKey=${{ secrets.KATALON_API_KEY }}
+            --config
+            -webui.autoUpdateDrivers=true
